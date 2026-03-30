@@ -15,6 +15,7 @@ public class App {
 	static final List<Prova> provas = new ArrayList<>();
 	static final List<Questao> questoes = new ArrayList<>();
 	static final List<Tentativa> tentativas = new ArrayList<>();
+	static final ParticipanteService participanteService = new ParticipanteService();
 
 	private static final Scanner in = new Scanner(System.in);
 
@@ -58,13 +59,7 @@ public class App {
 			return;
 		}
 
-		var p = new Participante();
-		p.setId(proximoParticipanteId++);
-		p.setNome(nome);
-		p.setEmail(email);
-
-		participantes.add(p);
-		System.out.println("Participante cadastrado: " + p.getId());
+		participanteService.adicionarParticipante(nome, email);
 	}
 
 	static void cadastrarProva() {
