@@ -17,6 +17,7 @@ public class App {
 	static final List<Tentativa> tentativas = new ArrayList<>();
 	static final ParticipanteService participanteService = new ParticipanteService();
 	static final ProvaService provaService = new ProvaService();
+	static final QuestaoService questaoService = new QuestaoService();
 
 	private static final Scanner in = new Scanner(System.in);
 
@@ -103,16 +104,7 @@ public class App {
 			return;
 		}
 
-		var q = new Questao();
-		q.setId(proximaQuestaoId++);
-		q.setProvaId(provaId);
-		q.setEnunciado(enunciado);
-		q.setAlternativas(alternativas);
-		q.setAlternativaCorreta(correta);
-
-		questoes.add(q);
-
-		System.out.println("Questão cadastrada: " + q.getId() + " (na prova " + provaId + ")");
+	   questaoService.adicionarQuestao(provaId, enunciado, alternativas, correta);
 	}
 
 
