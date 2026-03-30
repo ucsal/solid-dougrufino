@@ -15,6 +15,10 @@ public class App {
 	static final List<Prova> provas = new ArrayList<>();
 	static final List<Questao> questoes = new ArrayList<>();
 	static final List<Tentativa> tentativas = new ArrayList<>();
+	static final ParticipanteService participanteService = new ParticipanteService();
+	static final ProvaService provaService = new ProvaService();
+	static final QuestaoService questaoService = new QuestaoService();
+	static final TentativaService tentativaService = new TentativaService();
 
 	private static final Scanner in = new Scanner(System.in);
 
@@ -58,13 +62,7 @@ public class App {
 			return;
 		}
 
-		var p = new Participante();
-		p.setId(proximoParticipanteId++);
-		p.setNome(nome);
-		p.setEmail(email);
-
-		participantes.add(p);
-		System.out.println("Participante cadastrado: " + p.getId());
+		participanteService.adicionarParticipante(nome, email);
 	}
 
 	static void cadastrarProva() {
@@ -75,13 +73,7 @@ public class App {
 			System.out.println("título inválido");
 			return;
 		}
-
-		var prova = new Prova();
-		prova.setId(proximaProvaId++);
-		prova.setTitulo(titulo);
-
-		provas.add(prova);
-		System.out.println("Prova criada: " + prova.getId());
+    provaService.adicionarProva(titulo);
 	}
 
 	static void cadastrarQuestao() {
@@ -113,16 +105,7 @@ public class App {
 			return;
 		}
 
-		var q = new Questao();
-		q.setId(proximaQuestaoId++);
-		q.setProvaId(provaId);
-		q.setEnunciado(enunciado);
-		q.setAlternativas(alternativas);
-		q.setAlternativaCorreta(correta);
-
-		questoes.add(q);
-
-		System.out.println("Questão cadastrada: " + q.getId() + " (na prova " + provaId + ")");
+	   questaoService.adicionarQuestao(provaId, enunciado, alternativas, correta);
 	}
 
 
@@ -151,10 +134,7 @@ public class App {
 			return;
 		}
 
-		var tentativa = new Tentativa();
-		tentativa.setId(proximaTentativaId++);
-		tentativa.setParticipanteId(participanteId);
-		tentativa.setProvaId(provaId);
+		var tentativa = tentativaService.criarTentativa(participanteId, provaId);
 
 		System.out.println("\n--- Início da Prova ---");
 
@@ -178,17 +158,12 @@ public class App {
 				marcada = 'X';
 			}
 
-			var r = new Resposta();
-			r.setQuestaoId(q.getId());
-			r.setAlternativaMarcada(marcada);
-			r.setCorreta(q.isRespostaCorreta(marcada));
-
-			tentativa.getRespostas().add(r);
+		tentativaService.adicionarResposta(tentativa, q, marcada);
 		}
 
 		tentativas.add(tentativa);
 
-		int nota = calcularNota(tentativa);
+		int nota = tentativaService.calcularNota(tentativa);
 		System.out.println("\n--- Fim da Prova ---");
 		System.out.println("Nota (acertos): " + nota + " / " + tentativa.getRespostas().size());
 	}
