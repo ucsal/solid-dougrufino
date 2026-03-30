@@ -16,6 +16,7 @@ public class App {
 	static final List<Questao> questoes = new ArrayList<>();
 	static final List<Tentativa> tentativas = new ArrayList<>();
 	static final ParticipanteService participanteService = new ParticipanteService();
+	static final ProvaService provaService = new ProvaService();
 
 	private static final Scanner in = new Scanner(System.in);
 
@@ -70,13 +71,7 @@ public class App {
 			System.out.println("título inválido");
 			return;
 		}
-
-		var prova = new Prova();
-		prova.setId(proximaProvaId++);
-		prova.setTitulo(titulo);
-
-		provas.add(prova);
-		System.out.println("Prova criada: " + prova.getId());
+    provaService.adicionarProva(titulo);
 	}
 
 	static void cadastrarQuestao() {
